@@ -268,32 +268,3 @@
   </script>
 </body>
 </html>
-      // Prepare data to send
-      const payload = {
-        rater: formData.get("rater"),
-        patientName: formData.get("patientName"),
-        age: formData.get("age"),
-        gender: formData.get("gender"),
-        institution: formData.get("institution"),
-        classLevel: formData.get("classLevel"),
-        relationship: formData.get("relationship"),
-        assessmentDate: formData.get("assessmentDate"),
-        scores: scores,
-        inattentionScore: inattentionScore,
-        hyperactivityScore: hyperactivityScore,
-        oppositionalScore: oppositionalScore,
-        totalScore: sum
-      };
-
-      // ส่งข้อมูลไปยัง Google Sheet
-      fetch("https://script.google.com/macros/s/AKfycbxa1guRU1r-v0KtI-m245ZwO4ywfQCpLRYeK-iFmtt9l83-eC6_zPTMGe7YxIbiCgyb/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      }).then(() => {
-        alert("ส่งข้อมูลสำเร็จแล้ว");
-      }).catch(err => {
-        console.error("ส่งข้อมูลล้มเหลว", err);
-        alert("เกิดข้อผิดพลาดในการส่งข้อมูล");
-      });

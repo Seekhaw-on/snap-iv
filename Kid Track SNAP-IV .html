@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>แบบประเมินพฤติกรรมสมาธิสั้น (SNAP-IV)</title>
+  <title>แบบประเมินพฤติกรรมสมาธิสั้น (SNAP-IV) </title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body { padding: 2rem; }
@@ -11,7 +11,7 @@
 </head>
 <body>
   <h2>แบบประเมินพฤติกรรมสมาธิสั้น (SNAP-IV) Kid Track SNAP-IV</h2>
-
+  
   <form id="snapForm">
     <div class="mb-3">
       <label for="rater" class="form-label">ผู้ให้ข้อมูล</label>
@@ -21,32 +21,28 @@
         <option value="parent">ผู้ปกครอง</option>
       </select>
     </div>
-<!-- 2. ชื่อ-สกุลผู้ป่วย -->
-          <div class="mb-3">
+<div class="mb-3">
             <label for="patientName" class="form-label">ชื่อ-สกุลเด็ก</label>
-            <input type="text" class="form-control" id="patientName" required>
+            <input type="text" class="form-control" id="patientName" name="patientName" required>
           </div>
 
-          <!-- 3. อายุ -->
           <div class="mb-3">
             <label for="age" class="form-label">อายุ (ปี)</label>
-            <input type="number" class="form-control" id="age" min="1" max="25" required>
+            <input type="number" class="form-control" id="age" name="age" min="1" max="25" required>
           </div>
 
-          <!-- 4. เพศ -->
           <div class="mb-3">
             <label for="gender" class="form-label">เพศ</label>
-            <select class="form-select" id="gender" required>
+            <select class="form-select" id="gender" name="gender" required>
               <option value="">-- กรุณาเลือก --</option>
               <option value="male">ชาย</option>
               <option value="female">หญิง</option>
             </select>
           </div>
 
-          <!-- 5. สถานศึกษา / สถานบริการ -->
-<div class="mb-3">
+          <div class="mb-3">
   <label for="institution" class="form-label">สถานศึกษา / สถานบริการ</label>
-  <select class="form-select" id="institution" required>
+  <select class="form-select" id="institution" name="institution" required>
     <option value="">-- กรุณาเลือก --</option>
     <option>โรงเรียนอนุบาลพยัคฆภูมิพิสัย</option>
     <option>โรงเรียนบ้านหนองแคน</option>
@@ -112,10 +108,9 @@
 </div>
 
 
-          <!-- 6. ชั้นเรียน -->
-<div class="mb-3">
+          <div class="mb-3">
   <label for="classLevel" class="form-label">ชั้นเรียน</label>
-  <select class="form-select" id="classLevel" required>
+  <select class="form-select" id="classLevel" name="classLevel" required>
     <option value="">-- กรุณาเลือก --</option>
     <option>อนุบาล 1</option>
     <option>อนุบาล 2</option>
@@ -133,23 +128,21 @@
 </div>
 
 
-          <!-- 7. ความสัมพันธ์ของผู้ตอบแบบสอบถามกับเด็ก -->
           <div class="mb-3">
             <label for="relationship" class="form-label">ผู้ตอบแบบสอบถามมีความสัมพันธ์กับเด็กเป็น</label>
-            <input type="text" class="form-control" id="relationship" placeholder="เช่น แม่, ครูประจำชั้น" required>
+            <input type="text" class="form-control" id="relationship" name="relationship" placeholder="เช่น แม่, ครูประจำชั้น" required>
           </div>
 
-          <!-- 8. วันที่ประเมิน -->
           <div class="mb-4">
             <label for="assessmentDate" class="form-label">วันที่ประเมิน</label>
-            <input type="date" class="form-control" id="assessmentDate" required>
+            <input type="date" class="form-control" id="assessmentDate" name="assessmentDate" required>
           </div>
 
-        
+          
             </label>
           </div>
 
-         
+          
 
     <div id="questions"></div>
     <button type="submit" class="btn btn-primary mt-3">ส่งแบบประเมิน</button>
@@ -188,18 +181,24 @@
     ];
 
     const categories = {
-      inattention: [1,2,3,4,5,6,7,8,9],
-      hyperactivity: [10,11,12,13,14,15,16,17,18],
+      inattention: [1,2,3,4,5,6,7,8], // คำถามที่ 9 เป็น hyperactivity
+      hyperactivity: [9,10,11,12,13,14,15,16,17,18],
       oppositional: [19,20,21,22,23,24,25,26]
     };
 
+    const riskThresholds = {
+      teacher: { inattention: 18, hyperactivity: 11, oppositional: 8 },
+      parent: { inattention: 16, hyperactivity: 14, oppositional: 12 }
+    };
+
     const container = document.getElementById('questions');
+
     questions.forEach((q, i) => {
       const index = i + 1;
       const div = document.createElement('div');
       div.className = 'question';
-      div.innerHTML = `
-        <label>${index}. ${q}</label><br>
+      div.innerHTML = 
+        `<label>${index}. ${q}</label><br>
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="q${index}" value="0" required>
           <label class="form-check-label">ไม่เลย</label>
@@ -215,66 +214,102 @@
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="q${index}" value="3">
           <label class="form-check-label">บ่อยมาก</label>
-        </div>
-      `;
+        </div>`
+      ;
       container.appendChild(div);
     });
 
-    document.getElementById('snapForm').addEventListener('submit', async function(e) {
+    document.getElementById('snapForm').addEventListener('submit', function(e) {
       e.preventDefault();
-
-      const scriptURL = "https://script.google.com/macros/s/AKfycbyEzNWQexxR0Jlp14F9WGTdFswe2xUd0B9-CofqBm-qVKu-aX-h5e5H0T0DuGyHA9rU/exec"; // 🔁 เปลี่ยนตรงนี้
 
       const formData = new FormData(this);
       const rater = formData.get("rater");
-
       if (!rater) {
         alert("กรุณาเลือกผู้ให้ข้อมูลก่อนส่งแบบประเมิน");
         return;
       }
 
-      const scores = Array(26).fill(0).map((_, i) => parseInt(formData.get(`q${i+1}`)));
-      const inattention = categories.inattention.map(i => scores[i - 1]).reduce((a,b)=>a+b,0);
-      const hyperactivity = categories.hyperactivity.map(i => scores[i - 1]).reduce((a,b)=>a+b,0);
-      const oppositional = categories.oppositional.map(i => scores[i - 1]).reduce((a,b)=>a+b,0);
-      const totalScore = scores.reduce((a,b)=>a+b,0);
+      let scores = Array(26).fill(0).map((_, i) => parseInt(formData.get(`q${i+1}`)));
+      let sum = scores.reduce((a, b) => a + b, 0);
 
-      const payload = {
-        rater: formData.get("rater"),
-        patientName: document.getElementById("patientName").value,
-        age: document.getElementById("age").value,
-        gender: document.getElementById("gender").value,
-        institution: document.getElementById("institution").value,
-        classLevel: document.getElementById("classLevel").value,
-        relationship: document.getElementById("relationship").value,
-        assessmentDate: document.getElementById("assessmentDate").value,
-        scores,
-        inattention,
-        hyperactivity,
-        oppositional,
-        totalScore
+      function sumCategory(indexes) {
+        return indexes.map(i => scores[i - 1]).reduce((a, b) => a + b, 0);
+      }
+
+      function interpret(score, threshold) {
+        return score >= threshold ? "<span class='text-danger fw-bold'>เสี่ยง</span>" : "<span class='text-success fw-bold'>ปกติ</span>";
+      }
+
+      const inattentionScore = sumCategory(categories.inattention);
+      const hyperactivityScore = sumCategory(categories.hyperactivity);
+      const oppositionalScore = sumCategory(categories.oppositional);
+
+      const threshold = riskThresholds[rater];
+
+      const result = `
+        <h4>ผลการประเมิน</h4>
+        <ul>
+          <li>กลุ่ม Inattention: ${inattentionScore} / 24 (จาก 8 ข้อ) → ${interpret(inattentionScore, threshold.inattention)}</li>
+          <li>กลุ่ม Hyperactivity: ${hyperactivityScore} / 30 (จาก 10 ข้อ) → ${interpret(hyperactivityScore, threshold.hyperactivity)}</li>
+          <li>กลุ่ม Oppositional: ${oppositionalScore} / 24 (จาก 8 ข้อ) → ${interpret(oppositionalScore, threshold.oppositional)}</li>
+          <li><strong>คะแนนรวมทั้งหมด: ${sum} / 78</strong></li>
+        </ul>
+      `;
+
+      document.getElementById('result').innerHTML = result;
+
+      // Prepare data for Google Sheet
+      const dataToSend = {
+          rater: formData.get('rater'),
+          patientName: formData.get('patientName'),
+          age: formData.get('age'),
+          gender: formData.get('gender'),
+          institution: formData.get('institution'),
+          classLevel: formData.get('classLevel'),
+          relationship: formData.get('relationship'),
+          assessmentDate: formData.get('assessmentDate'),
+          inattentionScore: inattentionScore,
+          hyperactivityScore: hyperactivityScore,
+          oppositionalScore: oppositionalScore,
+          totalScore: sum,
+          inattentionRisk: inattentionScore >= threshold.inattention ? "เสี่ยง" : "ปกติ",
+          hyperactivityRisk: hyperactivityScore >= threshold.hyperactivity ? "เสี่ยง" : "ปกติ",
+          oppositionalRisk: oppositionalScore >= threshold.oppositional ? "เสี่ยง" : "ปกติ"
       };
+
+      // Add scores for each question
+      questions.forEach((q, i) => {
+        dataToSend[`q${i + 1}`] = scores[i];
+      });
+
+      // Call function to send data to Google Sheet
+      sendDataToGoogleSheet(dataToSend);
+    });
+
+    // Function to send data to Google Sheet via Apps Script
+    async function sendDataToGoogleSheet(data) {
+      // **ATTENTION**: Replace this URL with your deployed Google Apps Script Web App URL
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbxFHMzC7pYXiD_WibTeSI3smykzA0qHElu_bZ-THzm1H7AFO6l66v_CvRr7UuGwRhNB/exec'; 
 
       try {
         const response = await fetch(scriptURL, {
-          method: "POST",
-          body: JSON.stringify(payload),
-          headers: { "Content-Type": "application/json" }
+          method: 'POST',
+          mode: 'no-cors', // Use 'no-cors' for simple POST requests to Apps Script
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
         });
+        
+        // Note: With 'no-cors', you won't be able to inspect the response from Apps Script directly in the browser.
+        // For debugging, you might temporarily remove 'no-cors' and handle CORS on Apps Script if needed.
+        alert('ส่งข้อมูลไปยัง Google Sheet เรียบร้อยแล้ว!');
 
-        const resultText = await response.text();
-        if (resultText === "OK") {
-          document.getElementById('result').innerHTML = `<div class="alert alert-success">✅ ส่งข้อมูลเรียบร้อยแล้ว</div>`;
-          this.reset();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-          throw new Error(resultText);
-        }
       } catch (error) {
-        console.error("Error!", error.message);
-        document.getElementById('result').innerHTML = `<div class="alert alert-danger">❌ ไม่สามารถส่งข้อมูลได้: ${error.message}</div>`;
+        console.error('เกิดข้อผิดพลาดในการส่งข้อมูล:', error);
+        alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองอีกครั้ง');
       }
-    });
+    }
   </script>
 </body>
 </html>
